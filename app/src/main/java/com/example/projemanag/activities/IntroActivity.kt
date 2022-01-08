@@ -1,5 +1,6 @@
 package com.example.projemanag.activities
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,14 @@ class IntroActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
+        }
+
+        binding?.btnSignUpIntro?.setOnClickListener {
+            startActivity(Intent(this,SignUpActivity::class.java))
+        }
+
+        binding?.btnSignInIntro?.setOnClickListener {
+            startActivity(Intent(this,SignInActivity::class.java))
         }
 
         // This is used to get the file from the assets folder and set it to the title textView.
