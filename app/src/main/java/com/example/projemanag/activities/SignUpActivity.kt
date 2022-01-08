@@ -1,14 +1,15 @@
 package com.example.projemanag.activities
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignUpBinding
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : BaseActivity() {
 
     private var binding: ActivitySignUpBinding? = null
 
