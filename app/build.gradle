@@ -44,6 +44,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     testImplementation 'junit:junit:'
 
+    //CircularImage
+    implementation 'com.mikhaellopez:circularimageview:4.3.0'
+
     //Materials
     implementation 'com.google.android.material:material:1.4.0'
 
