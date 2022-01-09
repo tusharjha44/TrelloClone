@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignInBinding
+import com.example.projemanag.firebase.FireStoreClass
 import com.example.projemanag.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -63,10 +64,7 @@ class SignInActivity : BaseActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("Sign in", "signInWithEmail:success")
-//                        val user = auth.currentUser
-                        startActivity(Intent(this@SignInActivity,MainActivity::class.java))
+                        FireStoreClass().signInUser(this@SignInActivity)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("sign in", "signInWithEmail:failure", task.exception)

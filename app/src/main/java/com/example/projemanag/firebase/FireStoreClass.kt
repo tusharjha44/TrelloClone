@@ -6,7 +6,6 @@ import com.example.projemanag.activities.SignUpActivity
 import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -33,9 +32,7 @@ class FireStoreClass {
 
     fun signInUser(activity: SignInActivity) {
 
-        // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
-            // The document id to get the Fields of user.
             .document(getCurrentUserId())
             .get()
             .addOnSuccessListener { document ->
@@ -58,8 +55,16 @@ class FireStoreClass {
             }
     }
 
-    private fun getCurrentUserId(): String{
-        return FirebaseAuth.getInstance().currentUser!!.uid
+
+    fun getCurrentUserId(): String {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        var currentUserID = ""
+        if (currentUser != null) {
+            currentUserID = currentUser.uid
+        }
+
+        return currentUserID
     }
 
 }

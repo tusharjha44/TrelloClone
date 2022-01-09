@@ -13,6 +13,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySplashScreenBinding
+import com.example.projemanag.firebase.FireStoreClass
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -44,7 +45,16 @@ class SplashScreenActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(p0: Animation?) {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
+                    val currentUserID = FireStoreClass().getCurrentUserId()
+                    // Start the Intro Activity
+
+                    if (currentUserID.isNotEmpty()) {
+                        // Start the Main Activity
+                        startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+                    } else {
+                        // Start the Intro Activity
+                        startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
+                    }
                     finish()
                 },2000)
             }
