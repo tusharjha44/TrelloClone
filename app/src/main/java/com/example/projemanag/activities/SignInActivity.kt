@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivitySignInBinding
+import com.example.projemanag.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -93,4 +94,12 @@ class SignInActivity : BaseActivity() {
 
         }
     }
+
+    fun signInSuccess(user: User) {
+
+        hideProgressDialog()
+        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+        finish()
+    }
+
 }
