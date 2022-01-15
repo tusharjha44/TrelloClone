@@ -1,6 +1,8 @@
 package com.example.projemanag.firebase
 
+import android.app.Activity
 import android.util.Log
+import com.example.projemanag.activities.MainActivity
 import com.example.projemanag.activities.SignInActivity
 import com.example.projemanag.activities.SignUpActivity
 import com.example.projemanag.models.User
@@ -30,7 +32,7 @@ class FireStoreClass {
             }
     }
 
-    fun signInUser(activity: SignInActivity) {
+    fun signInUser(activity: Activity) {
 
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
@@ -43,10 +45,26 @@ class FireStoreClass {
                 // Here we have received the document snapshot which is converted into the User Data model object.
                 val loggedInUser = document.toObject(User::class.java)!!
 
-                // Here call a function of base activity for transferring the result to it.
-                activity.signInSuccess(loggedInUser)
+                when(activity){
+                    is SignInActivity->{
+                        activity.signInSuccess(loggedInUser)
+                    }
+                    is MainActivity->{
+                        activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                }
+
             }
             .addOnFailureListener { e ->
+
+                when(activity){
+                    is SignInActivity->{
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity->{
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while getting loggedIn user details",

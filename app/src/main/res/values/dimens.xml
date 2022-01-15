@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="splash_screen_title_text_size">65sp</dimen>
+    <dimen name="splash_screen_title_text_size">40sp</dimen>
 
     <dimen name="intro_screen_title_text_size">40sp</dimen>
     <dimen name="intro_screen_title_text_marginTop">40dp</dimen>
