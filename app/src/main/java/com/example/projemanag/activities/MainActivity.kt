@@ -89,7 +89,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     fun updateNavigationUserDetails(user: User){
         val headerView = binding?.navView?.getHeaderView(0)
-        val headerBinding = headerView!!.findViewById<ImageView>(R.id.iv_user_image)
+        val headerBinding = headerView!!.findViewById<ImageView>(R.id.iv_profile_user_image)
 
         Glide
             .with(this@MainActivity)
