@@ -8,7 +8,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.example.projemanag.R
@@ -40,7 +39,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         binding?.navView?.setNavigationItemSelectedListener(this)
 
-        FireStoreClass().signInUser(this)
+        FireStoreClass().loadUserData(this)
 
     }
 
@@ -72,8 +71,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-
-                Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity,MyProfileActivity::class.java))
             }
 
             R.id.nav_sign_out -> {
