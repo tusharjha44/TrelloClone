@@ -1,7 +1,9 @@
+
 package com.example.projemanag.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.example.projemanag.activities.MainActivity
 import com.example.projemanag.activities.MyProfileActivity
 import com.example.projemanag.activities.SignInActivity
@@ -30,6 +32,25 @@ class FireStoreClass {
                     "Error writing document",
                     e
                 )
+            }
+    }
+
+    fun updateUserProfileData(activity: MyProfileActivity,userHshMap: HashMap<String,Any>){
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserId())
+            .update(userHshMap)
+            .addOnSuccessListener {
+                Log.i(activity.javaClass.simpleName,"Profile Dta Updated")
+                Toast.makeText(activity,"Profile Updated Successfully",Toast.LENGTH_SHORT).show()
+                activity.profileUpdateSuccess()
+
+            }.addOnFailureListener{
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName
+                    ,"Error while creating board",it)
+                Toast.makeText(activity
+                    ,"Error when Updating the Profile..",Toast.LENGTH_SHORT).show()
+
             }
     }
 
