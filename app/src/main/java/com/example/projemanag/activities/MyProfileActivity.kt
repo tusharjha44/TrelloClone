@@ -1,5 +1,3 @@
-
-
 package com.example.projemanag.activities
 
 import android.Manifest
@@ -220,6 +218,7 @@ class MyProfileActivity : BaseActivity() {
 
     fun profileUpdateSuccess(){
         hideProgressDialog()
+        setResult(Activity.RESULT_OK)
         finish()
     }
 }

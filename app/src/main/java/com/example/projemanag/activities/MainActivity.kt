@@ -1,8 +1,10 @@
 package com.example.projemanag.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -20,6 +22,10 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListener {
 
     private var binding:ActivityMainBinding? = null
+
+    companion object {
+        const val MY_PROFILE_REQUEST_CODE: Int = 11
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,10 +74,25 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK
+            && requestCode == MY_PROFILE_REQUEST_CODE
+        ) {
+            // Get the user updated details.
+            FireStoreClass().loadUserData(this@MainActivity)
+        } else {
+            Log.e("Cancelled", "Cancelled")
+        }
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-                startActivity(Intent(this@MainActivity,MyProfileActivity::class.java))
+                startActivityForResult(Intent(this@MainActivity
+                    ,MyProfileActivity::class.java),
+                    MY_PROFILE_REQUEST_CODE)
             }
 
             R.id.nav_sign_out -> {
