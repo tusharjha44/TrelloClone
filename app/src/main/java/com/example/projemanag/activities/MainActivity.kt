@@ -47,6 +47,10 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         FireStoreClass().loadUserData(this)
 
+        binding?.appBarMainLayout?.fabCreateBoard?.setOnClickListener {
+            startActivity(Intent(this,CreateBoardActivity::class.java))
+        }
+
     }
 
     private fun setupActionBar(){
