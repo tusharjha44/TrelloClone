@@ -16,12 +16,15 @@ import com.example.projemanag.R
 import com.example.projemanag.databinding.ActivityMainBinding
 import com.example.projemanag.firebase.FireStoreClass
 import com.example.projemanag.models.User
+import com.example.projemanag.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListener {
 
     private var binding:ActivityMainBinding? = null
+
+    private lateinit var mUserName: String
 
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
@@ -48,7 +51,10 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         FireStoreClass().loadUserData(this)
 
         binding?.appBarMainLayout?.fabCreateBoard?.setOnClickListener {
-            startActivity(Intent(this,CreateBoardActivity::class.java))
+            val intent = Intent(this,
+                CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME,mUserName)
+            startActivity(intent)
         }
 
     }
@@ -113,6 +119,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     }
 
     fun updateNavigationUserDetails(user: User){
+
+        mUserName = user.name
+
         val headerView = binding?.navView?.getHeaderView(0)
         val headerBinding = headerView!!.findViewById<ImageView>(R.id.iv_profile_user_image)
 
