@@ -1,20 +1,27 @@
 package com.example.projemanag.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projemanag.R
+import com.example.projemanag.adapters.BoardsItemAdapter
 import com.example.projemanag.databinding.ActivityMainBinding
+import com.example.projemanag.databinding.ContentMainBinding
 import com.example.projemanag.firebase.FireStoreClass
+import com.example.projemanag.models.Board
 import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
 import com.google.android.material.navigation.NavigationView
@@ -28,6 +35,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     companion object {
         const val MY_PROFILE_REQUEST_CODE: Int = 11
+        const val CREATE_BOARD_REQUEST_CODE: Int = 12
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +56,13 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         binding?.navView?.setNavigationItemSelectedListener(this)
 
-        FireStoreClass().loadUserData(this)
+        FireStoreClass().loadUserData(this,true)
 
         binding?.appBarMainLayout?.fabCreateBoard?.setOnClickListener {
             val intent = Intent(this,
                 CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME,mUserName)
-            startActivity(intent)
+            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
 
     }
@@ -65,6 +73,50 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         binding?.appBarMainLayout?.toolbarMainActivity?.setNavigationOnClickListener {
            toggleDrawer()
+        }
+    }
+
+    @SuppressLint("CutPasteId")
+    fun populateBoardsListToUI(boardsList: ArrayList<Board>) {
+        hideProgressDialog()
+
+//        val contentMainBinding: ContentMainBinding = ContentMainBinding.inflate(layoutInflater)
+
+        if (boardsList.size > 0) {
+
+            // Toggling the views: Board List + No Boards Available
+//             contentMainBinding.rvBoardsList.visibility = View.VISIBLE
+//             contentMainBinding.tvNoBoardsAvailable.visibility = View.GONE
+
+            // We are choosing a Linear Layout
+//             contentMainBinding.rvBoardsList.layoutManager = LinearLayoutManager(this@MainActivity)
+//             contentMainBinding.rvBoardsList.setHasFixedSize(true)
+
+            // Create an instance of BoardItemsAdapter and pass the boardList to it.
+//             val adapter = BoardsItemAdapter(this@MainActivity, boardsList)
+
+            // Attach the adapter to the recyclerView.
+//             contentMainBinding.rvBoardsList.adapter = adapter
+
+            findViewById<RecyclerView>(R.id.rv_boards_list).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.tv_no_boards_available).visibility = View.GONE
+
+            findViewById<RecyclerView>(R.id.rv_boards_list).layoutManager =
+                LinearLayoutManager(this@MainActivity)
+            findViewById<RecyclerView>(R.id.rv_boards_list).setHasFixedSize(true)
+
+            val adapter = BoardsItemAdapter(this@MainActivity, boardsList)
+            findViewById<RecyclerView>(R.id.rv_boards_list).adapter = adapter
+
+        } else {
+
+//            // Toggling the views: Board List + No Boards Available
+//             contentMainBinding.rvBoardsList.visibility = View.GONE
+//             contentMainBinding.tvNoBoardsAvailable.visibility = View.VISIBLE
+
+            findViewById<RecyclerView>(R.id.rv_boards_list).visibility = View.GONE
+            findViewById<TextView>(R.id.tv_no_boards_available).visibility = View.VISIBLE
+
         }
     }
 
@@ -92,7 +144,10 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         ) {
             // Get the user updated details.
             FireStoreClass().loadUserData(this@MainActivity)
-        } else {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == CREATE_BOARD_REQUEST_CODE) {
+            FireStoreClass().getBoardsList(this@MainActivity)
+        }
+        else {
             Log.e("Cancelled", "Cancelled")
         }
     }
@@ -118,7 +173,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         return true
     }
 
-    fun updateNavigationUserDetails(user: User){
+    fun updateNavigationUserDetails(user: User, readBoardsList: Boolean){
 
         mUserName = user.name
 
@@ -133,6 +188,13 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
             .into(headerBinding)
 
         headerView.findViewById<TextView>(R.id.tv_username).text = user.name
+
+        if(readBoardsList){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FireStoreClass().getBoardsList(this)
+        }
+
     }
+
 
 }
