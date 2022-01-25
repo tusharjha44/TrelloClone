@@ -8,14 +8,16 @@ data class Board (
     var name: String = "",
     var createdBy: String = "",
     var assignedTo: ArrayList<String> = ArrayList(),
-    var documentID: String = ""
+    var documentID: String = "",
+    var taskList: ArrayList<Task> = ArrayList()
 ):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.createTypedArrayList(Task.CREATOR)!!
         )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -24,6 +26,7 @@ data class Board (
         parcel.writeString(createdBy)
         parcel.writeStringList(assignedTo)
         parcel.writeString(documentID)
+        parcel.writeTypedList(taskList)
     }
 
     override fun describeContents(): Int {

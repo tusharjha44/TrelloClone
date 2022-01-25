@@ -151,4 +151,20 @@ class FireStoreClass {
         return currentUserID
     }
 
+    fun getBoardDetails(activity: TaskListActivity,documentID: String) {
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentID)
+            .get()
+            .addOnSuccessListener {
+                    document->
+                Log.i(activity.javaClass.simpleName,document.toString())
+
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating the board",it)
+            }
+    }
+
 }
