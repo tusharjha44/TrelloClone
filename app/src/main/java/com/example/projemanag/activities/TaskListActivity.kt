@@ -1,7 +1,5 @@
 package com.example.projemanag.activities
 
-import android.icu.text.CaseMap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projemanag.R
@@ -15,6 +13,8 @@ import com.example.projemanag.utils.Constants
 class TaskListActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTaskListBinding
+
+    private lateinit var mBoardDetails: Board
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class TaskListActivity : BaseActivity() {
 
     }
 
-    private fun setupActionBar(title: String) {
+    private fun setupActionBar() {
 
         setSupportActionBar(binding.toolbarTaskListActivity)
 
@@ -39,15 +39,18 @@ class TaskListActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = title
+            actionBar.title = mBoardDetails.name
         }
 
         binding.toolbarTaskListActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     fun boardDetails(board: Board){
+
+        mBoardDetails = board
+
         hideProgressDialog()
-        setupActionBar(board.name)
+        setupActionBar()
 
         val addTaskList = Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
@@ -59,6 +62,24 @@ class TaskListActivity : BaseActivity() {
         val adapter = TaskListItemsAdapter(this,board.taskList)
         binding.rvTaskList.adapter = adapter
 
+    }
+
+    fun addUpdateTaskListSuccess(){
+        hideProgressDialog()
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FireStoreClass().getBoardDetails(this,mBoardDetails.documentID)
+    }
+
+    fun createTaskList(taskListName: String){
+        val task = Task(taskListName,FireStoreClass().getCurrentUserId())
+        mBoardDetails.taskList.add(0,task)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FireStoreClass().addUpdateTaskList(this,mBoardDetails)
 
     }
 
