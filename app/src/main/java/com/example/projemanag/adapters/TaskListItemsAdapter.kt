@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projemanag.activities.TaskListActivity
 import com.example.projemanag.databinding.ItemTaskBinding
@@ -39,6 +40,12 @@ open class TaskListItemsAdapter
         val model = list[position]
 
         if(holder is MyViewHolder){
+
+            /*
+
+      ADD LIST SECTION
+
+      */
             if(position == list.size -1){
                 holder.binding.tvAddTaskList.visibility = View.VISIBLE
                 holder.binding.llTaskItem.visibility = View.GONE
@@ -102,6 +109,43 @@ open class TaskListItemsAdapter
             holder.binding.ibDeleteList.setOnClickListener {
                 alertDialogForDeleteList(position,model.title)
             }
+
+            /*
+
+            ADD CARD SECTION
+
+            */
+
+            holder.binding.tvAddCard.setOnClickListener {
+                holder.binding.tvAddCard.visibility = View.GONE
+                holder.binding.cvAddCard.visibility = View.VISIBLE
+            }
+
+            holder.binding.ibCloseCardName.setOnClickListener {
+                holder.binding.tvAddCard.visibility = View.VISIBLE
+                holder.binding.cvAddCard.visibility = View.GONE
+            }
+
+            holder.binding.ibDoneCardName.setOnClickListener {
+
+                val cardName = holder.binding.etCardName.text.toString()
+
+                if (cardName.isNotEmpty()) {
+                    if (context is TaskListActivity) {
+                        context.addCardToTaskList(position,cardName)
+                    }
+                } else {
+                    Toast.makeText(context, "Please Enter a Card Name.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            holder.binding.rvCardList.layoutManager = LinearLayoutManager(context)
+            holder.binding.rvCardList.setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context,model.cards)
+            holder.binding.rvCardList.adapter = adapter
+
 
         }
 
