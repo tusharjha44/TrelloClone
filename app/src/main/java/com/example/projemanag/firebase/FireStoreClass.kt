@@ -187,4 +187,28 @@ class FireStoreClass {
             }
     }
 
+    fun getAssignedMembersListDetails(activity: MembersActivity,assignedTo: ArrayList<String>){
+        mFireStore.collection(Constants.USERS)
+            .whereIn(Constants.ID,assignedTo)
+            .get()
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName,it.documents.toString())
+
+                val usersList: ArrayList<User> = ArrayList()
+
+                for(i in it.documents){
+                    val user = i.toObject(User::class.java)
+                    if (user != null) {
+                        usersList.add(user)
+                    }
+                }
+                activity.setUpMembersList(usersList)
+
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating Board",it)
+            }
+    }
+
 }
