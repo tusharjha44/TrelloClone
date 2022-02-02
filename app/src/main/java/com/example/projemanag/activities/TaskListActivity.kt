@@ -2,13 +2,10 @@ package com.example.projemanag.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.annotation.NonNull
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projemanag.R
 import com.example.projemanag.adapters.TaskListItemsAdapter
@@ -19,7 +16,6 @@ import com.example.projemanag.models.Card
 import com.example.projemanag.models.Task
 import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
-import com.google.firestore.v1.FirestoreGrpc
 
 class TaskListActivity : BaseActivity() {
 
@@ -191,6 +187,16 @@ class TaskListActivity : BaseActivity() {
         )
 
         mBoardDetails.taskList[position] = task
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().addUpdateTaskList(this,mBoardDetails)
+
+    }
+
+    fun updateCardsInTaskList(taskPosition: Int, cards: java.util.ArrayList<Card>) {
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        mBoardDetails.taskList[taskPosition].cards = cards
 
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().addUpdateTaskList(this,mBoardDetails)
