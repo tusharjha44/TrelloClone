@@ -74,4 +74,5 @@ open class MemberListItemsAdapter(
     }
 
     class MyViewHolder(var binding: ItemMemberBinding) : RecyclerView.ViewHolder(binding.root)
+
 }
