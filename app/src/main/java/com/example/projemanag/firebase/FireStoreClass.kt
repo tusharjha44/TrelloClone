@@ -54,17 +54,32 @@ class FireStoreClass {
             }
     }
 
-    fun updateUserProfileData(activity: MyProfileActivity,userHshMap: HashMap<String,Any>){
+    fun updateUserProfileData(activity: Activity,userHshMap: HashMap<String,Any>){
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .update(userHshMap)
             .addOnSuccessListener {
                 Log.i(activity.javaClass.simpleName,"Profile Dta Updated")
                 Toast.makeText(activity,"Profile Updated Successfully",Toast.LENGTH_SHORT).show()
-                activity.profileUpdateSuccess()
+
+                when(activity){
+                    is MainActivity->{
+                        activity.tokenUpdateSuccess()
+                    }
+                    is MyProfileActivity -> {
+                        activity.profileUpdateSuccess()
+                    }
+                }
 
             }.addOnFailureListener{
-                activity.hideProgressDialog()
+                when(activity){
+                    is MainActivity->{
+                        activity.hideProgressDialog()
+                    }
+                    is MyProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(activity.javaClass.simpleName
                     ,"Error while creating board",it)
                 Toast.makeText(activity

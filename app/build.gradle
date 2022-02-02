@@ -59,6 +59,9 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    //Notification
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+
     // Declare the dependency for the Cloud Storage library
     implementation 'com.google.firebase:firebase-storage-ktx'
 
