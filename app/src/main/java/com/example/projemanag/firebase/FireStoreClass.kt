@@ -2,6 +2,7 @@
 package com.example.projemanag.firebase
 
 import android.app.Activity
+import android.app.AsyncNotedAppOp
 import android.util.Log
 import android.widget.Toast
 import com.example.projemanag.activities.*
@@ -209,6 +210,47 @@ class FireStoreClass {
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName,"Error while creating Board",it)
             }
+    }
+
+    fun getMemberDetails(activity: MembersActivity, email: String) {
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL,email)
+            .get()
+            .addOnSuccessListener { document->
+
+                if(document.documents.size > 0){
+                    val user = document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+
+                }else{
+                    activity.hideProgressDialog()
+                    activity.showErrorSnackBar("No such Member Found")
+                }
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,
+                "Error while getting user Details",it)
+            }
+    }
+
+    fun assignMemberToBoard(activity: MembersActivity,board: Board,user: User){
+
+        val assignedToHshMap = HashMap<String,Any>()
+        assignedToHshMap[Constants.ASSIGNED_TO] = board.assignedTo
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentID)
+            .update(assignedToHshMap)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }
+            .addOnFailureListener {
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,
+                    "Error while getting user Details",it)
+            }
+
     }
 
 }

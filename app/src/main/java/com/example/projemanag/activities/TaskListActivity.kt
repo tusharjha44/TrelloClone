@@ -1,9 +1,14 @@
 package com.example.projemanag.activities
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.NonNull
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projemanag.R
 import com.example.projemanag.adapters.TaskListItemsAdapter
@@ -19,21 +24,35 @@ class TaskListActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskListBinding
 
     private lateinit var mBoardDetails: Board
+    private lateinit var mBoardDocumentID: String
+    companion object{
+        private const val MEMBERS_REQUEST_CODE: Int = 13
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var boardDocumentID = ""
         if(intent.hasExtra(Constants.DOCUMENT_ID)){
-            boardDocumentID = intent.getStringExtra(Constants.DOCUMENT_ID)!!
+            mBoardDocumentID = intent.getStringExtra(Constants.DOCUMENT_ID)!!
         }
 
         showProgressDialog(resources.getString(R.string.please_wait))
-        FireStoreClass().getBoardDetails(this,boardDocumentID)
+        FireStoreClass().getBoardDetails(this,mBoardDocumentID)
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == MEMBERS_REQUEST_CODE){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FireStoreClass().getBoardDetails(this,mBoardDocumentID)
+        }else {
+            Log.e("Cancelled", "Cancelled")
+        }
+    }
+
 
     private fun setupActionBar() {
 
@@ -60,7 +79,8 @@ class TaskListActivity : BaseActivity() {
             R.id.action_members ->{
                 val intent = Intent(this,MembersActivity::class.java)
                 intent.putExtra(Constants.BOARD_DETAIL,mBoardDetails)
-                startActivity(intent)
+                startActivityForResult(intent, MEMBERS_REQUEST_CODE)
+                return true
             }
         }
 

@@ -46,10 +46,11 @@ class CreateBoardActivity : BaseActivity() {
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 Constants.showImageChooser(this)
-            } else {
+            }
+            else {
                 ActivityCompat.requestPermissions(
                     this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_APN_SETTINGS),
                     Constants.READ_STORAGE_PERMISSION_CODE
                 )
             }
