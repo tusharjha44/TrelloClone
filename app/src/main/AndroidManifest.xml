@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.projemanag" >
+    package="com.example.projemanag">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,10 +16,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Projemanag" >
+        android:theme="@style/Theme.Projemanag">
         <activity
             android:name=".activities.CardDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.Projemanag.NoActionBar"  />
         <activity
             android:name=".activities.MembersActivity"
             android:exported="false"
@@ -62,7 +64,7 @@
             android:name=".activities.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.Projemanag.NoActionBar" >
+            android:theme="@style/Theme.Projemanag.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

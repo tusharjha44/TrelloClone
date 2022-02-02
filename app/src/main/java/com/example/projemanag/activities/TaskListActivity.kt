@@ -27,6 +27,7 @@ class TaskListActivity : BaseActivity() {
     private lateinit var mBoardDocumentID: String
     companion object{
         private const val MEMBERS_REQUEST_CODE: Int = 13
+        private const val CARD_DETAILS_REQUEST_CODE: Int = 14
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +46,7 @@ class TaskListActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK && requestCode == MEMBERS_REQUEST_CODE){
+        if(resultCode == Activity.RESULT_OK && requestCode == MEMBERS_REQUEST_CODE || requestCode == CARD_DETAILS_REQUEST_CODE){
             showProgressDialog(resources.getString(R.string.please_wait))
             FireStoreClass().getBoardDetails(this,mBoardDocumentID)
         }else {
@@ -88,6 +89,13 @@ class TaskListActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun cardDetails(taskListPosition: Int,cardPosition: Int){
+        var intent = Intent(this,CardDetailsActivity::class.java)
+        intent.putExtra(Constants.BOARD_DETAIL,mBoardDetails)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition)
+        startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
+    }
     fun boardDetails(board: Board){
 
         mBoardDetails = board
