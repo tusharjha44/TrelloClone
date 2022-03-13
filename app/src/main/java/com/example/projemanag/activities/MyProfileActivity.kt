@@ -150,7 +150,7 @@ class MyProfileActivity : BaseActivity() {
         if(binding.etName.text.toString() != mUserDetails.name){
             userHashMap[Constants.NAME] = binding.etName.text.toString()
         }
-        if(binding.etMobile.text.toString() != mUserDetails.name){
+        if(binding.etMobile.text.toString() != mUserDetails.mobile){
             userHashMap[Constants.MOBILE] = binding.etMobile.text.toString().toLong()
         }
 
